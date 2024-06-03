@@ -20,12 +20,7 @@ resource "aws_db_instance" "obligatorio-rds" {
 
   db_subnet_group_name = aws_db_subnet_group.network-group-obligatorio.id
 
-
-
   skip_final_snapshot = true
-
-}
-
-output "db-ip" {
-  value = aws_db_instance.obligatorio-rds.endpoint
+#backup de la base 
+  backup_retention_period = 7
 }
