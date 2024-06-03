@@ -37,3 +37,9 @@ variable "DB_DATABASE" {
   type        = string
   description = "Variable para nombre de la base"
 }
+
+variable "retention_period" {
+  type        = number
+  description = "Variable para especificar la cantidad de dias de retencion"
+  
+}

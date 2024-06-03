@@ -22,5 +22,5 @@ resource "aws_db_instance" "obligatorio-rds" {
 
   skip_final_snapshot = true
 #backup de la base 
-  backup_retention_period = 7
+  backup_retention_period = var.retention_period
 }
