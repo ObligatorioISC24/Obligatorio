@@ -14,7 +14,7 @@ resource "aws_instance" "webapp-server01" {
     type        = "ssh"
     user        = "ec2-user"
     host        = self.public_ip
-    private_key = file("/home/Terraformkey.pem") ##cambiar aca por la ubicacion de la clave en tu pc
+    private_key = file("/home/santiago/Terraformkey.pem") ##cambiar aca por la ubicacion de la clave en tu pc
   }
 
   provisioner "remote-exec" {
@@ -51,7 +51,7 @@ resource "aws_instance" "webapp-server02" {
     type        = "ssh"
     user        = "ec2-user"
     host        = self.public_ip
-    private_key = file("/home/Terraformkey.pem") ##cambiar aca por la ubicacion de la clave en tu pc
+    private_key = file("/home/santiago/Terraformkey.pem") ##cambiar aca por la ubicacion de la clave en tu pc
   }
 
   provisioner "remote-exec" {
@@ -88,7 +88,7 @@ resource "aws_instance" "backup-server" {
     type        = "ssh"
     user        = "ec2-user"
     host        = self.public_ip
-    private_key = file("/home/Terraformkey.pem") ##cambiar aca por la ubicacion de la clave en tu pc
+    private_key = file("/home/santiago/Terraformkey.pem") ##cambiar aca por la ubicacion de la clave en tu pc
   }
 
   #Definicion de volumen para BACKUP
@@ -103,7 +103,10 @@ resource "aws_instance" "backup-server" {
     inline = [
       "sudo mkfs -t ext4 /dev/sdh && sudo mkdir /mnt/backup && sudo mount /dev/sdh /mnt/backup ",
       "sudo mkdir /mnt/nfs && sudo mount -t nfs -o nfsvers=4.1,rsize=1048576,wsize=1048576,hard,timeo=600,retrans=2,noresvport ${aws_efs_file_system.obligatorio-efs.dns_name}:/   /mnt/nfs",
-      "echo '0 23 * * * root cp -R /mnt/nfs/* /mnt/backup' | sudo tee -a /etc/crontab",
+      "sudo echo '${file("/home/santiago/Obligatorio/backup.sh")}' > backup.sh",
+      "sudo chmod a+x backup.sh",
+      "sudo yum install cronie -y && sudo systemctl enable crond.service && sudo systemctl start crond.service",
+      "echo '0 23 * * * root backup.sh' | sudo tee -a /etc/crontab",
       "sudo systemctl restart crond"
     ]
   }

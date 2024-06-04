@@ -5,7 +5,7 @@ resource "aws_lb" "alb-obligatorio" {
   security_groups    = [aws_security_group.obligatorio-sg.id]
   subnets            = [aws_subnet.obligatorio-tf-subnet-a.id, aws_subnet.obligatorio-tf-subnet-b.id]
 
-  enable_deletion_protection = true
+  enable_deletion_protection = false
 
   tags = {
     Environment = "dev"
