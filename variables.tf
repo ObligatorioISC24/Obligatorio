@@ -56,6 +56,12 @@ variable "private_key_path" {
   
 }
 
+variable "script_path" {
+  type        = string
+  description = "Variable para especificar la ruta al script de backup, ej. /home/script.sh"
+  
+}
+
 variable "instance_type_name" {
   type        = string
   description = "Variable para especificar el tipo de instancia"

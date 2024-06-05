@@ -28,7 +28,7 @@ Descripción de la Arquitectura:
 - Editar en el archivo obligatorio_vars.tfvars con los valores para las variables
 - Configurar las credenciales de AWS en el archivo credentials
 - Inicializar el directorio de trabajo con terraform init
-- Ejecutar el codigo con terraform apply
+- Ejecutar el codigo con terraform apply -var-file="obligatorio_vars.tfvars"
 
 ## Providers
 
@@ -79,7 +79,7 @@ Descripción de la Arquitectura:
 | <a name="input_private_subnet_a"></a> [private\_subnet\_a](#input\_private\_subnet\_a) | Variable para la subnet az-a | `string` | n/a | yes |
 | <a name="input_private_subnet_b"></a> [private\_subnet\_b](#input\_private\_subnet\_b) | Variable para la subnet az-b | `string` | n/a | yes |
 | <a name="input_retention_period"></a> [retention\_period](#input\_retention\_period) | Variable para especificar la cantidad de dias de retencion de los snapshot en RDS | `number` | n/a | yes |
+| <a name="input_script_path"></a> [script\_path](#input\_script\_path) | Variable para especificar la ruta al script de backup, ej. /home/script.sh | `string` | n/a | yes |
 | <a name="input_vpc_aws_az-a"></a> [vpc\_aws\_az-a](#input\_vpc\_aws\_az-a) | Variable para la zona az-a | `string` | n/a | yes |
 | <a name="input_vpc_aws_az-b"></a> [vpc\_aws\_az-b](#input\_vpc\_aws\_az-b) | Variable para la zona az-b | `string` | n/a | yes |
 | <a name="input_vpc_cidr"></a> [vpc\_cidr](#input\_vpc\_cidr) | Variable para el CIDR block | `string` | n/a | yes |
-

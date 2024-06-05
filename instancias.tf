@@ -1,7 +1,7 @@
 ## webapp-server01
 resource "aws_instance" "webapp-server01" {
   ami                    = var.instance_ami
-  depends_on             = [aws_db_instance.obligatorio-rds]
+  depends_on             = [aws_db_instance.obligatorio-rds, aws_efs_file_system.obligatorio-efs]
   instance_type          = var.instance_type_name
   key_name               = var.private_key_name
   vpc_security_group_ids = [aws_security_group.obligatorio-sg.id]
@@ -19,18 +19,23 @@ resource "aws_instance" "webapp-server01" {
 
   provisioner "remote-exec" {
     inline = [
+      "sudo amazon-linux-extras enable epel",
+      "sudo yum install -y epel-release",
+      "sudo yum install -y http://rpms.remirepo.net/enterprise/remi-release-7.rpm",
+      "sudo yum-config-manager --enable remi-php54",
+      "sudo yum install -y php php-cli php-common php-mbstring php-xml php-mysql php-fpm",
       "sudo yum install -y httpd",
       "sudo systemctl start httpd",
       "sudo yum install -y git",
-      "sudo yum install -y mariadb105",
+      "sudo yum install mariadb.x86_64",
       "sudo chmod 777 /var/www/html",
-      "git clone https://github.com/mauricioamendola/simple-ecomme.git /var/www/html",
+      "sudo mkdir /var/www/html/img && sudo mount -t nfs -o nfsvers=4.1,rsize=1048576,wsize=1048576,hard,timeo=600,retrans=2,noresvport ${aws_efs_file_system.obligatorio-efs.dns_name}:/   /var/www/html/img",
+      "git clone https://github.com/ObligatorioISC24/ecommerce.git /var/www/html",
       "sudo sed -i 's/localhost/${aws_db_instance.obligatorio-rds.address}/' /var/www/html/config.php",
-      "wget https://raw.githubusercontent.com/mauricioamendola/simple-ecomme/master/dump.sql",
-      "sudo mysql -h ${aws_db_instance.obligatorio-rds.address} -u root -pobligatorio idukan < dump.sql", ##Revisar como tomar la variable en vez de poner la clave
-      "sudo systemctl restart httpd",
-      "sudo mkdir /var/www/documentos",
-      "sudo mount -t nfs -o nfsvers=4.1,rsize=1048576,wsize=1048576,hard,timeo=600,retrans=2,noresvport ${aws_efs_file_system.obligatorio-efs.dns_name}:/   /var/www/documentos"
+      "wget https://raw.githubusercontent.com/ObligatorioISC24/ecommerce/main/dump.sql",
+      "sudo mysql -h ${aws_db_instance.obligatorio-rds.address} -u ${var.DB_USER} -p${var.DB_PASSWORD} ${var.DB_DATABASE} < dump.sql", ##Revisar como tomar la variable en vez de poner la clave
+      "sudo systemctl restart httpd"
+
     ]
   }
 }
@@ -38,7 +43,7 @@ resource "aws_instance" "webapp-server01" {
 ## webapp-server02
 resource "aws_instance" "webapp-server02" {
   ami                    = var.instance_ami
-  depends_on             = [aws_db_instance.obligatorio-rds]
+  depends_on             = [aws_db_instance.obligatorio-rds, aws_efs_file_system.obligatorio-efs]
   instance_type          = var.instance_type_name
   key_name               = var.private_key_name
   vpc_security_group_ids = [aws_security_group.obligatorio-sg.id]
@@ -56,19 +61,23 @@ resource "aws_instance" "webapp-server02" {
 
   provisioner "remote-exec" {
     inline = [
+       "sudo amazon-linux-extras enable epel",
+      "sudo yum install -y epel-release",
+      "sudo yum install -y http://rpms.remirepo.net/enterprise/remi-release-7.rpm",
+      "sudo yum-config-manager --enable remi-php54",
+      "sudo yum install -y php php-cli php-common php-mbstring php-xml php-mysql php-fpm",
       "sudo yum install -y httpd",
       "sudo systemctl start httpd",
       "sudo yum install -y git",
-      "sudo yum install -y mariadb105",
+      "sudo yum install mariadb.x86_64",
       "sudo chmod 777 /var/www/html",
-      "git clone https://github.com/mauricioamendola/simple-ecomme.git /var/www/html",
+      "sudo mkdir /var/www/html/img && sudo mount -t nfs -o nfsvers=4.1,rsize=1048576,wsize=1048576,hard,timeo=600,retrans=2,noresvport ${aws_efs_file_system.obligatorio-efs.dns_name}:/   /var/www/html/img",
+      "git clone https://github.com/ObligatorioISC24/ecommerce.git /var/www/html",
       "sudo sed -i 's/localhost/${aws_db_instance.obligatorio-rds.address}/' /var/www/html/config.php",
-      "wget https://raw.githubusercontent.com/mauricioamendola/simple-ecomme/master/dump.sql",
-      "sudo mysql -h ${aws_db_instance.obligatorio-rds.address} -u root -pobligatorio idukan < dump.sql",
-      "sudo systemctl restart httpd",
-      "sudo mkdir /var/www/documentos",
-      "sudo mount -t nfs -o nfsvers=4.1,rsize=1048576,wsize=1048576,hard,timeo=600,retrans=2,noresvport ${aws_efs_file_system.obligatorio-efs.dns_name}:/   /var/www/documentos"
-
+      "wget https://raw.githubusercontent.com/ObligatorioISC24/ecommerce/main/dump.sql",
+      "sudo mysql -h ${aws_db_instance.obligatorio-rds.address} -u ${var.DB_USER} -p${var.DB_PASSWORD} ${var.DB_DATABASE} < dump.sql", ##Revisar como tomar la variable en vez de poner la clave
+      "sudo systemctl restart httpd"
+      
     ]
   }
 }
@@ -103,7 +112,7 @@ resource "aws_instance" "backup-server" {
     inline = [
       "sudo mkfs -t ext4 /dev/sdh && sudo mkdir /mnt/backup && sudo mount /dev/sdh /mnt/backup ",
       "sudo mkdir /mnt/nfs && sudo mount -t nfs -o nfsvers=4.1,rsize=1048576,wsize=1048576,hard,timeo=600,retrans=2,noresvport ${aws_efs_file_system.obligatorio-efs.dns_name}:/   /mnt/nfs",
-      "sudo echo '${file("/home/santiago/Obligatorio/backup.sh")}' > backup.sh",
+      "sudo echo '${file(var.script_path)}' > backup.sh",
       "sudo chmod a+x backup.sh",
       "sudo yum install cronie -y && sudo systemctl enable crond.service && sudo systemctl start crond.service",
       "echo '0 23 * * * root backup.sh' | sudo tee -a /etc/crontab",

@@ -6,6 +6,8 @@ resource "aws_db_instance" "obligatorio-rds" {
 
   engine = "mysql"
 
+  engine_version = "5.7.44"
+
   instance_class = "db.t3.micro"
 
   identifier = var.DB_DATABASE

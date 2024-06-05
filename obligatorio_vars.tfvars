@@ -11,4 +11,5 @@ retention_period = 7
 private_key_path = "/home/santiago/Terraformkey.pem"
 private_key_name = "Terraformkey"
 instance_type_name = "t2.micro"
-instance_ami = "ami-051f8a213df8bc089"
+instance_ami = "ami-0d191299f2822b1fa"
+script_path = "/home/santiago/Obligatorio/backup.sh"
