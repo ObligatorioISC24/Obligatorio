@@ -46,7 +46,7 @@ variable "retention_period" {
 
 variable "private_key_name" {
   type        = string
-  description = "Variable para especificar el nombre a private key, ej. private.pem"
+  description = "Variable para especificar el nombre a private key, ej. private"
   
 }
 
