@@ -9,9 +9,9 @@
 <!-- BEGIN_TF_DOCS -->
 ## Requirements
 
-[AWS CLI](https://docs.aws.amazon.com/cli/latest/userguide/getting-started-install.html)
-[Terraform](https://developer.hashicorp.com/terraform/tutorials/aws-get-started/install-cli)
-[Git](https://github.com/git-guides/install-git)
+- [AWS CLI](https://docs.aws.amazon.com/cli/latest/userguide/getting-started-install.html)
+- [Terraform](https://developer.hashicorp.com/terraform/tutorials/aws-get-started/install-cli)
+- [Git](https://github.com/git-guides/install-git)
 
 ## Providers
 
