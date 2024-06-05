@@ -1,6 +1,6 @@
 ## Obligatorio Soluciones Cloud
 
-### Diagrama
+## Diagrama
 
 <p align = "center"> 
 <img src = "Diagrama.png">
@@ -9,7 +9,9 @@
 <!-- BEGIN_TF_DOCS -->
 ## Requirements
 
-No requirements.
+[AWS CLI](https://docs.aws.amazon.com/cli/latest/userguide/getting-started-install.html)
+[Terraform](https://developer.hashicorp.com/terraform/tutorials/aws-get-started/install-cli)
+[Git](https://github.com/git-guides/install-git)
 
 ## Providers
 
@@ -17,9 +19,6 @@ No requirements.
 |------|---------|
 | <a name="provider_aws"></a> [aws](#provider\_aws) | 5.52.0 |
 
-## Modules
-
-No modules.
 
 ## Resources
 
@@ -63,7 +62,4 @@ No modules.
 | <a name="input_vpc_aws_az-b"></a> [vpc\_aws\_az-b](#input\_vpc\_aws\_az-b) | Variable para la zona az-b | `string` | n/a | yes |
 | <a name="input_vpc_cidr"></a> [vpc\_cidr](#input\_vpc\_cidr) | Variable para el CIDR block | `string` | n/a | yes |
 
-## Outputs
-
-No outputs.
 <!-- END_TF_DOCS -->
