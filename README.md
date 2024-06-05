@@ -25,7 +25,7 @@ Descripción de la Arquitectura:
 ## Despliegue
 
 - Clonar el repo localmente 
-- Editar en el archivo instancias.tf private_key = file("ruta a la clave privada de aws")
+- Editar en el archivo obligatorio_vars.tfvars con los valores para las variables
 - Configurar las credenciales de AWS en el archivo credentials
 - Inicializar el directorio de trabajo con terraform init
 - Ejecutar el codigo con terraform apply
@@ -72,9 +72,13 @@ Descripción de la Arquitectura:
 | <a name="input_DB_DATABASE"></a> [DB\_DATABASE](#input\_DB\_DATABASE) | Variable para nombre de la base | `string` | n/a | yes |
 | <a name="input_DB_PASSWORD"></a> [DB\_PASSWORD](#input\_DB\_PASSWORD) | Variable para Password RDS | `string` | n/a | yes |
 | <a name="input_DB_USER"></a> [DB\_USER](#input\_DB\_USER) | Variable para usuario RDS | `string` | n/a | yes |
+| <a name="input_instance_ami"></a> [instance\_ami](#input\_instance\_ami) | Variable para especificar la AMI | `string` | n/a | yes |
+| <a name="input_instance_type_name"></a> [instance\_type\_name](#input\_instance\_type\_name) | Variable para especificar el tipo de instancia | `string` | n/a | yes |
+| <a name="input_private_key_name"></a> [private\_key\_name](#input\_private\_key\_name) | Variable para especificar el nombre a private key, ej. private.pem | `string` | n/a | yes |
+| <a name="input_private_key_path"></a> [private\_key\_path](#input\_private\_key\_path) | Variable para especificar la ruta a la private key, ej. /home/private.pem | `string` | n/a | yes |
 | <a name="input_private_subnet_a"></a> [private\_subnet\_a](#input\_private\_subnet\_a) | Variable para la subnet az-a | `string` | n/a | yes |
 | <a name="input_private_subnet_b"></a> [private\_subnet\_b](#input\_private\_subnet\_b) | Variable para la subnet az-b | `string` | n/a | yes |
-| <a name="input_retention_period"></a> [retention\_period](#input\_retention\_period) | Variable para especificar la cantidad de dias de retencion | `number` | n/a | yes |
+| <a name="input_retention_period"></a> [retention\_period](#input\_retention\_period) | Variable para especificar la cantidad de dias de retencion de los snapshot en RDS | `number` | n/a | yes |
 | <a name="input_vpc_aws_az-a"></a> [vpc\_aws\_az-a](#input\_vpc\_aws\_az-a) | Variable para la zona az-a | `string` | n/a | yes |
 | <a name="input_vpc_aws_az-b"></a> [vpc\_aws\_az-b](#input\_vpc\_aws\_az-b) | Variable para la zona az-b | `string` | n/a | yes |
 | <a name="input_vpc_cidr"></a> [vpc\_cidr](#input\_vpc\_cidr) | Variable para el CIDR block | `string` | n/a | yes |

@@ -1,9 +1,9 @@
 ## webapp-server01
 resource "aws_instance" "webapp-server01" {
-  ami                    = "ami-051f8a213df8bc089"
+  ami                    = var.instance_ami
   depends_on             = [aws_db_instance.obligatorio-rds]
-  instance_type          = "t2.micro"
-  key_name               = "Terraformkey" ##Revisar que exista esta clave en AWS
+  instance_type          = var.instance_type_name
+  key_name               = var.private_key_name
   vpc_security_group_ids = [aws_security_group.obligatorio-sg.id]
   subnet_id              = aws_subnet.obligatorio-tf-subnet-a.id
   tags = {
@@ -14,7 +14,7 @@ resource "aws_instance" "webapp-server01" {
     type        = "ssh"
     user        = "ec2-user"
     host        = self.public_ip
-    private_key = file("/home/santiago/Terraformkey.pem") ##cambiar aca por la ubicacion de la clave en tu pc
+    private_key = file(var.private_key_path) 
   }
 
   provisioner "remote-exec" {
@@ -37,10 +37,10 @@ resource "aws_instance" "webapp-server01" {
 
 ## webapp-server02
 resource "aws_instance" "webapp-server02" {
-  ami                    = "ami-051f8a213df8bc089"
+  ami                    = var.instance_ami
   depends_on             = [aws_db_instance.obligatorio-rds]
-  instance_type          = "t2.micro"
-  key_name               = "Terraformkey" ##Revisar que exista esta clave en AWS
+  instance_type          = var.instance_type_name
+  key_name               = var.private_key_name
   vpc_security_group_ids = [aws_security_group.obligatorio-sg.id]
   subnet_id              = aws_subnet.obligatorio-tf-subnet-b.id
   tags = {
@@ -51,7 +51,7 @@ resource "aws_instance" "webapp-server02" {
     type        = "ssh"
     user        = "ec2-user"
     host        = self.public_ip
-    private_key = file("/home/santiago/Terraformkey.pem") ##cambiar aca por la ubicacion de la clave en tu pc
+    private_key = file(var.private_key_path) 
   }
 
   provisioner "remote-exec" {
@@ -74,10 +74,10 @@ resource "aws_instance" "webapp-server02" {
 }
 ## BACKUP
 resource "aws_instance" "backup-server" {
-  ami                    = "ami-051f8a213df8bc089"
+  ami                    = var.instance_ami
   depends_on             = [aws_db_instance.obligatorio-rds]
-  instance_type          = "t2.micro"
-  key_name               = "Terraformkey" ##Revisar que exista esta clave en AWS
+  instance_type          = var.instance_type_name
+  key_name               = var.private_key_name
   vpc_security_group_ids = [aws_security_group.obligatorio-sg.id]
   subnet_id              = aws_subnet.obligatorio-tf-subnet-a.id
   tags = {
@@ -88,7 +88,7 @@ resource "aws_instance" "backup-server" {
     type        = "ssh"
     user        = "ec2-user"
     host        = self.public_ip
-    private_key = file("/home/santiago/Terraformkey.pem") ##cambiar aca por la ubicacion de la clave en tu pc
+    private_key = file(var.private_key_path) 
   }
 
   #Definicion de volumen para BACKUP

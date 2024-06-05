@@ -8,3 +8,5 @@ vpc_aws_az-b     = "us-east-1b"
 DB_DATABASE      = "idukan"
 DB_USER          = "root"
 retention_period = 7
+private_key_path = "/home/santiago/Terraformkey.pem"
+private_key_private_key_name = "Terraformkey.pem"

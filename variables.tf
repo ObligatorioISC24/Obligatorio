@@ -40,6 +40,30 @@ variable "DB_DATABASE" {
 
 variable "retention_period" {
   type        = number
-  description = "Variable para especificar la cantidad de dias de retencion"
+  description = "Variable para especificar la cantidad de dias de retencion de los snapshot en RDS"
+  
+}
+
+variable "private_key_name" {
+  type        = string
+  description = "Variable para especificar el nombre a private key, ej. private.pem"
+  
+}
+
+variable "private_key_path" {
+  type        = string
+  description = "Variable para especificar la ruta a la private key, ej. /home/private.pem"
+  
+}
+
+variable "instance_type_name" {
+  type        = string
+  description = "Variable para especificar el tipo de instancia"
+  
+}
+
+variable "instance_ami" {
+  type        = string
+  description = "Variable para especificar la AMI"
   
 }
