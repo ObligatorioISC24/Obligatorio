@@ -1,17 +1,34 @@
 ## Obligatorio Soluciones Cloud
 
+## Introducción
+
+Este repo contiene el código en terraform necesario para desplegar la infraestructura en AWS solicitada en el obligatorio de soluciones cloud.
+Descripción de la Arquitectura:
+- Un LoadBalancer HTTP/S
+- Dos servidores Web
+- Una base de datos relacional
+- Un servidor donde se almacenan documentos estáticos
+- Un servidor de backup con persistencia
+
 ## Diagrama
 
 <p align = "center"> 
 <img src = "Diagrama.png">
 </p>
 
-<!-- BEGIN_TF_DOCS -->
-## Requirements
+## Requerimientos
 
 - [AWS CLI](https://docs.aws.amazon.com/cli/latest/userguide/getting-started-install.html)
 - [Terraform](https://developer.hashicorp.com/terraform/tutorials/aws-get-started/install-cli)
 - [Git](https://github.com/git-guides/install-git)
+
+## Despliegue
+
+- Clonar el repo localmente 
+- Editar en el archivo instancias.tf private_key = file("ruta a la clave privada de aws")
+- Configurar las credenciales de AWS en el archivo credentials
+- Inicializar el directorio de trabajo con terraform init
+- Ejecutar el codigo con terraform apply
 
 ## Providers
 
@@ -62,4 +79,3 @@
 | <a name="input_vpc_aws_az-b"></a> [vpc\_aws\_az-b](#input\_vpc\_aws\_az-b) | Variable para la zona az-b | `string` | n/a | yes |
 | <a name="input_vpc_cidr"></a> [vpc\_cidr](#input\_vpc\_cidr) | Variable para el CIDR block | `string` | n/a | yes |
 
-<!-- END_TF_DOCS -->
