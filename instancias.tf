@@ -27,10 +27,12 @@ resource "aws_instance" "webapp-server01" {
       "sudo yum install -y httpd",
       "sudo systemctl start httpd",
       "sudo yum install -y git",
-      "sudo yum install mariadb.x86_64",
+      "sudo yum install -y mariadb.x86_64",
       "sudo chmod 777 /var/www/html",
       "sudo mkdir /var/www/html/img && sudo mount -t nfs -o nfsvers=4.1,rsize=1048576,wsize=1048576,hard,timeo=600,retrans=2,noresvport ${aws_efs_file_system.obligatorio-efs.dns_name}:/   /var/www/html/img",
-      "git clone https://github.com/ObligatorioISC24/ecommerce.git /var/www/html",
+      "git clone https://github.com/ObligatorioISC24/ecommerce.git",
+      "sudo mv /home/ec2-user/ecommerce/img/* /var/www/html/img/ && rm -r /home/ec2-user/ecommerce/img/",
+      "sudo mv /home/ec2-user/ecommerce/* /var/www/html/",
       "sudo sed -i 's/localhost/${aws_db_instance.obligatorio-rds.address}/' /var/www/html/config.php",
       "wget https://raw.githubusercontent.com/ObligatorioISC24/ecommerce/main/dump.sql",
       "sudo mysql -h ${aws_db_instance.obligatorio-rds.address} -u ${var.DB_USER} -p${var.DB_PASSWORD} ${var.DB_DATABASE} < dump.sql", ##Revisar como tomar la variable en vez de poner la clave
@@ -61,7 +63,7 @@ resource "aws_instance" "webapp-server02" {
 
   provisioner "remote-exec" {
     inline = [
-       "sudo amazon-linux-extras enable epel",
+      "sudo amazon-linux-extras enable epel",
       "sudo yum install -y epel-release",
       "sudo yum install -y http://rpms.remirepo.net/enterprise/remi-release-7.rpm",
       "sudo yum-config-manager --enable remi-php54",
@@ -69,10 +71,12 @@ resource "aws_instance" "webapp-server02" {
       "sudo yum install -y httpd",
       "sudo systemctl start httpd",
       "sudo yum install -y git",
-      "sudo yum install mariadb.x86_64",
+      "sudo yum install -y mariadb.x86_64",
       "sudo chmod 777 /var/www/html",
       "sudo mkdir /var/www/html/img && sudo mount -t nfs -o nfsvers=4.1,rsize=1048576,wsize=1048576,hard,timeo=600,retrans=2,noresvport ${aws_efs_file_system.obligatorio-efs.dns_name}:/   /var/www/html/img",
-      "git clone https://github.com/ObligatorioISC24/ecommerce.git /var/www/html",
+      "git clone https://github.com/ObligatorioISC24/ecommerce.git",
+      "sudo mv /home/ec2-user/ecommerce/img/* /var/www/html/img/ && rm -r /home/ec2-user/ecommerce/img/",
+      "sudo mv /home/ec2-user/ecommerce/* /var/www/html/",
       "sudo sed -i 's/localhost/${aws_db_instance.obligatorio-rds.address}/' /var/www/html/config.php",
       "wget https://raw.githubusercontent.com/ObligatorioISC24/ecommerce/main/dump.sql",
       "sudo mysql -h ${aws_db_instance.obligatorio-rds.address} -u ${var.DB_USER} -p${var.DB_PASSWORD} ${var.DB_DATABASE} < dump.sql", ##Revisar como tomar la variable en vez de poner la clave
