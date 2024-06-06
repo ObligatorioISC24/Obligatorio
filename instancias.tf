@@ -34,6 +34,7 @@ resource "aws_instance" "webapp-server01" {
       "sudo mv /home/ec2-user/ecommerce/img/* /var/www/html/img/ && rm -r /home/ec2-user/ecommerce/img/",
       "sudo mv /home/ec2-user/ecommerce/* /var/www/html/",
       "sudo sed -i 's/localhost/${aws_db_instance.obligatorio-rds.address}/' /var/www/html/config.php",
+      "sudo sed -i 's/define('DB_PASSWORD', 'root')/define('DB_PASSWORD', '${var.var.DB_PASSWORD}')/' /var/www/html/config.php",
       "wget https://raw.githubusercontent.com/ObligatorioISC24/ecommerce/main/dump.sql",
       "sudo mysql -h ${aws_db_instance.obligatorio-rds.address} -u ${var.DB_USER} -p${var.DB_PASSWORD} ${var.DB_DATABASE} < dump.sql", ##Revisar como tomar la variable en vez de poner la clave
       "sudo systemctl restart httpd"
@@ -78,6 +79,7 @@ resource "aws_instance" "webapp-server02" {
       "sudo mv /home/ec2-user/ecommerce/img/* /var/www/html/img/ && rm -r /home/ec2-user/ecommerce/img/",
       "sudo mv /home/ec2-user/ecommerce/* /var/www/html/",
       "sudo sed -i 's/localhost/${aws_db_instance.obligatorio-rds.address}/' /var/www/html/config.php",
+      "sudo sed -i 's/define('DB_PASSWORD', 'root')/define('DB_PASSWORD', '${var.var.DB_PASSWORD}')/' /var/www/html/config.php",
       "wget https://raw.githubusercontent.com/ObligatorioISC24/ecommerce/main/dump.sql",
       "sudo mysql -h ${aws_db_instance.obligatorio-rds.address} -u ${var.DB_USER} -p${var.DB_PASSWORD} ${var.DB_DATABASE} < dump.sql", ##Revisar como tomar la variable en vez de poner la clave
       "sudo systemctl restart httpd"
