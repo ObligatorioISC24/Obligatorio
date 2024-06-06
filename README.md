@@ -53,9 +53,9 @@ Configura la conexión de la aplicación web con la base de datos, actualizando 
 
 ## -3 Clonación y despliegue de la aplicación web:
 
-Clona un repositorio de GitHub que contiene la aplicación web de ecommerce.
-Mueve los archivos de la aplicación web al directorio raíz del servidor web.
-Mueve las imágenes de la aplicación web al directorio correspondiente en el servidor web.
+Clona un repositorio de GitHub que contiene la aplicación web de ecommerce luego
+mueve los archivos de la aplicación web al directorio raíz del servidor web y finalmente
+mueve las imágenes de la aplicación web al directorio correspondiente en el servidor web.
 
 ## -4 Configuración de la base de datos:
 
