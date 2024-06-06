@@ -34,6 +34,38 @@ A continuación demostraremos la topologia de la infraestrucura con una ilustrac
 
 [![asciicast](https://asciinema.org/a/dhtUDZOmstMq37KSB8gmyeTCt.svg)](https://asciinema.org/a/dhtUDZOmstMq37KSB8gmyeTCt)
 
+## Remote-exec
+ En este apartado explicaremos brevemente las implementaciones que tenemos dentro de la configuración del "remote-exec" que poseemos en nuestros servidores.
+
+ Este script de ejecución remota en AWS realiza una serie de pasos para configurar un entorno de servidor web con PHP y una base de datos MySQL, clonar un repositorio de GitHub y configurar una aplicación web.
+
+Este script es útil para configurar rápidamente un entorno de desarrollo o producción para una aplicación web en AWS, a continuación dejaremos un pequeño desgloce en 5 grandes pasos de lo que realiza el remote-exec.
+
+-1 Configuración de servidor web y PHP:
+
+Habilita repositorios adicionales de paquetes.
+Instala PHP, Apache (httpd), y otros paquetes necesarios para ejecutar aplicaciones web en PHP.
+
+-2 Preparación de la base de datos:
+
+Instala el servidor de base de datos MariaDB.
+Configura la conexión de la aplicación web con la base de datos, actualizando la configuración en el archivo config.php.
+
+-3 Clonación y despliegue de la aplicación web:
+
+Clona un repositorio de GitHub que contiene la aplicación web de comercio electrónico.
+Mueve los archivos de la aplicación web al directorio raíz del servidor web.
+Mueve las imágenes de la aplicación web al directorio correspondiente en el servidor web.
+
+-4 Configuración de la base de datos:
+
+Descarga un archivo SQL de un repositorio remoto.
+Importa la base de datos utilizando MySQL desde el archivo SQL descargado.
+
+-5 Finalización y reinicio del servidor web:
+
+Reinicia el servidor web Apache para aplicar todas las configuraciones y cambios realizados.
+
 ## Providers
 
 | Name | Version |
