@@ -12,6 +12,8 @@ Descripción de la Arquitectura:
 
 ## Diagrama
 
+A continuación demostraremos la topologia de la infraestrucura con una ilustración implementada describiendo todos los componentes que integran la misma, explicandose en un VPC el cual contiene dos zonas de disponibilidad dentro de las mismas un security group con 2 instancias pertenecientes a subnets diferentes, una base de datos relacional, un servidor de EFS donde se almacenan documentos estaticos,servidor de backup con persistencia y adicionalmente un Application Load Balancer HTTPS.
+
 <p align = "center"> 
 <img src = "Diagrama.png">
 </p>
