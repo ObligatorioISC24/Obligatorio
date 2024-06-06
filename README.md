@@ -30,6 +30,8 @@ Descripción de la Arquitectura:
 - Inicializar el directorio de trabajo con terraform init
 - Ejecutar el codigo con terraform apply -var-file="obligatorio_vars.tfvars"
 
+[![asciicast](https://asciinema.org/a/dhtUDZOmstMq37KSB8gmyeTCt.svg)](https://asciinema.org/a/dhtUDZOmstMq37KSB8gmyeTCt)
+
 ## Providers
 
 | Name | Version |
