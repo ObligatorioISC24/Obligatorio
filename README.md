@@ -82,6 +82,63 @@ Esto lo realizamos con la instancia particularmente cuando se implementa se ejec
 
 -------------------------------
 
+## Descripción
+
+Esta infraestructura como código creada en Terraform está dividida en distintos archivos `.tf`, cada uno correspondiente a un recurso o grupo de recursos en común de AWS y un archivo `.tfvars` donde se carga el valor para las variables definidas. Explicaremos brevemente la función de cada archivo y los puntos importantes de cada uno.
+
+### `alb.tf`
+
+Este archivo contiene el código para desplegar el Application Load Balancer. Dentro del mismo se define los listener, target group y se asocia el security group correspondiente para permitir el acceso.
+
+### `efs.tf`
+
+Este archivo contiene el código para desplegar el servicio de archivos EFS. Dentro del mismo se define los mount target que son desde qué redes se va a poder montar por NFS dicho servicio y se asocia el security group correspondiente para permitir el acceso.
+
+### `instancias.tf`
+
+Este archivo contiene el código para desplegar las instancias. Dentro del mismo se definen cosas básicas como la AMI, subred, SG, etc. Lo particular en nuestro caso es la personalización que realizamos dentro del sistema operativo de cada instancia con el provisioner “remote-exec”. Con este provisioner podemos ejecutar comandos del sistema operativo una vez que la instancia está levantada.
+
+En el caso de las instancias que utilizamos para la web app, con el `remote-exec` ejecutamos los comandos correspondientes para dejar la app 100% operativa. Esto incluye los siguientes puntos:
+
+- Instalar repositorios y servicios (epel, remis, php, apache, mysql).
+- Instalar la app realizando la clonación de un repositorio git.
+- Configurar la app para que acceda a la base de datos creada en RDS.
+- Montar el EFS creado en la carpeta donde guarda las imágenes la app.
+- Levantar un respaldo de la base de datos desde un dump.
+- Inicializar servicios.
+
+En el caso de la instancia para backups, con el `remote-exec` realizamos los siguientes puntos:
+
+- Montaje de nuevo disco persistente para alojar los backups.
+- Montaje del servicio EFS.
+- Copiamos el script de backup desde el PC donde ejecutamos Terraform hacia la instancia. Este script realiza una copia desde el EFS hacia el disco para backups, creando una carpeta por día y manteniendo las últimas 7.
+- Programamos en cron para que se ejecute el script todos los días a las 23hs.
+- Reiniciamos servicios.
+
+### `networking.tf`
+
+Este archivo contiene el código para desplegar todos los componentes de red que se van a utilizar. En el mismo se define:
+
+- VPC
+- Subnet
+- Internet Gateway
+- Routing Table
+- Security Group
+
+### `provider.tf`
+
+En este archivo se especifican los provider a utilizar en el código de Terraform. En nuestro caso, estamos utilizando solo el de AWS.
+
+### `rds.tf`
+
+Este archivo contiene el código para desplegar el servicio de bases de datos RDS de AWS. Se define el motor de base de datos a utilizar (MySQL) y la versión 5.7.44. También se especifica que se realice backup de la misma con un periodo de retención definido en la variable `retention_period`.
+
+### `variables.tf`
+
+En este archivo se definen todas las variables a utilizar en el código de Terraform. Se define el nombre, el tipo y el valor por defecto que puede tener o no.
+
+
+--------------------------------
 
 ## Providers
 
