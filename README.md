@@ -66,6 +66,10 @@ Importa la base de datos utilizando MySQL desde el archivo SQL descargado.
 
 Reinicia el servidor web Apache para aplicar todas las configuraciones y cambios realizados.
 
+## Backup
+Contaremos dentro de la implementación de nuestra infraestructura con un storage de backup persistente en el cual tendremos un respaldo dentro de una instancia todos los documentos del filesystem asi mismo como tambien un backup de nuestra base de datos.
+Esto lo realizamos con la instancia particularmente cuando se implementa se ejecuta un script para realizar dicho respaldo montando un filesystem que va a alojar el mismo.
+
 ## Providers
 
 | Name | Version |
