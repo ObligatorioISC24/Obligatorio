@@ -10,9 +10,15 @@ Descripción de la Arquitectura:
 - Un servidor donde se almacenan documentos estáticos
 - Un servidor de backup con persistencia
 
+### Revisar
 ## Diagrama
-
+--------------------------------
 A continuación demostraremos la topologia de la infraestrucura con una ilustración implementada describiendo todos los componentes que integran la misma, explicandose en un VPC el cual contiene dos zonas de disponibilidad dentro de las mismas un security group con 2 instancias pertenecientes a subnets diferentes, una base de datos relacional, un servidor de EFS donde se almacenan documentos estaticos,servidor de backup con persistencia y adicionalmente un Application Load Balancer HTTPS.
+
+--------------------------------
+
+El siguiente diagrama representa la infraestructura planteada para la resolución del trabajo obligatorio de soluciones cloud. La misma consta de un application load balancer que atiende las consultas de los usuarios provenientes de internet y las balancea entre dos instancias ec2 que brindan el servicio de web server, dichas instancias se encuentran en zonas de disponibilidad distintas para lograr redundancia. A su vez estas instancias consumen los servicios de RDS (base de datos) y EFS (almacenamiento de archivos) para el funcionamiento de la web app. También se desplego una instancia ec2 que oficia de servidor de backup, todos estos componentes viven dentro de un mismo VPC.
+
 
 <p align = "center"> 
 <img src = "Diagrama.png">
@@ -34,6 +40,10 @@ A continuación demostraremos la topologia de la infraestrucura con una ilustrac
 
 [![asciicast](https://asciinema.org/a/dhtUDZOmstMq37KSB8gmyeTCt.svg)](https://asciinema.org/a/dhtUDZOmstMq37KSB8gmyeTCt)
 
+
+### Revisar
+
+---------------------------
 ## Remote-exec
  En este apartado explicaremos brevemente las implementaciones que tenemos dentro de la configuración del "remote-exec" que poseemos en nuestros servidores.
 
@@ -41,34 +51,37 @@ A continuación demostraremos la topologia de la infraestrucura con una ilustrac
 
 Este script es útil para configurar rápidamente un entorno de desarrollo o producción para una aplicación web en AWS, a continuación dejaremos un pequeño desgloce en 5 grandes pasos de lo que realiza el remote-exec.
 
-**-1 Configuración de servidor web y PHP:**
+**1 Configuración de servidor web y PHP:**
 
 Habilita repositorios adicionales de paquetes.
 Instala PHP, Apache (httpd), y otros paquetes necesarios para ejecutar aplicaciones web en PHP.
 
-**-2 Preparación de la base de datos:**
+**2 Preparación de la base de datos:**
 
 Instala el servidor de base de datos MariaDB.
 Configura la conexión de la aplicación web con la base de datos, actualizando la configuración en el archivo config.php.
 
-**-3 Clonación y despliegue de la aplicación web:**
+**3 Clonación y despliegue de la aplicación web:**
 
 Clona un repositorio de GitHub que contiene la aplicación web de ecommerce luego
 mueve los archivos de la aplicación web al directorio raíz del servidor web y finalmente
 mueve las imágenes de la aplicación web al directorio correspondiente en el servidor web.
 
-**-4 Configuración de la base de datos:**
+**4 Configuración de la base de datos:**
 
 Descarga un archivo SQL de un repositorio remoto.
 Importa la base de datos utilizando MySQL desde el archivo SQL descargado.
 
-**-5 Finalización y reinicio del servidor web:**
+**5 Finalización y reinicio del servidor web:**
 
 Reinicia el servidor web Apache para aplicar todas las configuraciones y cambios realizados.
 
 ## Backup
 Contaremos dentro de la implementación de nuestra infraestructura con un storage de backup persistente en el cual tendremos un respaldo dentro de una instancia todos los documentos del filesystem asi mismo como tambien un backup de nuestra base de datos.
 Esto lo realizamos con la instancia particularmente cuando se implementa se ejecuta un script para realizar dicho respaldo montando un filesystem que va a alojar el mismo.
+
+-------------------------------
+
 
 ## Providers
 
