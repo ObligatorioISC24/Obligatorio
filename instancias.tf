@@ -29,15 +29,14 @@ resource "aws_instance" "webapp-server01" {
       "sudo yum install -y git",
       "sudo yum install -y mariadb.x86_64",
       "sudo chmod 777 /var/www/html",
-      "sudo mkdir /var/www/html/img && sudo mount -t nfs -o nfsvers=4.1,rsize=1048576,wsize=1048576,hard,timeo=600,retrans=2,noresvport ${aws_efs_file_system.obligatorio-efs.dns_name}:/   /var/www/html/img",
-      "git clone https://github.com/ObligatorioISC24/ecommerce.git",
-      "sudo mv /home/ec2-user/ecommerce/img/* /var/www/html/img/ && rm -r /home/ec2-user/ecommerce/img/",
-      "sudo mv /home/ec2-user/ecommerce/* /var/www/html/",
-      "sudo sed -i 's/localhost/${aws_db_instance.obligatorio-rds.address}/' /var/www/html/config.php",
-      "sudo sed -i \"s/define('DB_PASSWORD', 'root')/define('DB_PASSWORD', '${var.DB_PASSWORD}')/\" /var/www/html/config.php",
+      "sudo mkdir /var/www/html/img && sudo mount -t nfs -o nfsvers=4.1,rsize=1048576,wsize=1048576,hard,timeo=600,retrans=2,noresvport ${aws_efs_file_system.obligatorio-efs.dns_name}:/   /var/www/html/img", #montaje de EFS en directorio utilizado para las imagenes de la app
+      "git clone https://github.com/ObligatorioISC24/ecommerce.git", #clonado del repo en el home para poder copiar las imagenes hacia el NFS
+      "sudo mv /home/ec2-user/ecommerce/img/* /var/www/html/img/ && rm -r /home/ec2-user/ecommerce/img/", #movimiento de las imagenes y borrado de la carpeta img para no copiarla vacia en el siguiente punto
+      "sudo mv /home/ec2-user/ecommerce/* /var/www/html/", #movimiento de la app al directorio correcto
+      "sudo sed -i 's/localhost/${aws_db_instance.obligatorio-rds.address}/' /var/www/html/config.php", #Reemplazo de la url de la base de datos
+      "sudo sed -i \"s/define('DB_PASSWORD', 'root')/define('DB_PASSWORD', '${var.DB_PASSWORD}')/\" /var/www/html/config.php", # reemplazo de la password
       "wget https://raw.githubusercontent.com/ObligatorioISC24/ecommerce/main/dump.sql",
-      "sudo mysql -h ${aws_db_instance.obligatorio-rds.address} -u ${var.DB_USER} -p${var.DB_PASSWORD} ${var.DB_DATABASE} < dump.sql", ##Revisar como tomar la variable en vez de poner la clave
-      "sudo systemctl restart httpd"
+      "sudo mysql -h ${aws_db_instance.obligatorio-rds.address} -u ${var.DB_USER} -p${var.DB_PASSWORD} ${var.DB_DATABASE} < dump.sql", #volcado del dump en la base
 
     ]
   }
@@ -81,7 +80,7 @@ resource "aws_instance" "webapp-server02" {
       "sudo sed -i 's/localhost/${aws_db_instance.obligatorio-rds.address}/' /var/www/html/config.php",
       "sudo sed -i \"s/define('DB_PASSWORD', 'root')/define('DB_PASSWORD', '${var.DB_PASSWORD}')/\" /var/www/html/config.php",
       "wget https://raw.githubusercontent.com/ObligatorioISC24/ecommerce/main/dump.sql",
-      "sudo mysql -h ${aws_db_instance.obligatorio-rds.address} -u ${var.DB_USER} -p${var.DB_PASSWORD} ${var.DB_DATABASE} < dump.sql", ##Revisar como tomar la variable en vez de poner la clave
+      "sudo mysql -h ${aws_db_instance.obligatorio-rds.address} -u ${var.DB_USER} -p${var.DB_PASSWORD} ${var.DB_DATABASE} < dump.sql", 
       "sudo systemctl restart httpd"
       
     ]
@@ -116,12 +115,12 @@ resource "aws_instance" "backup-server" {
 
   provisioner "remote-exec" {
     inline = [
-      "sudo mkfs -t ext4 /dev/sdh && sudo mkdir /mnt/backup && sudo mount /dev/sdh /mnt/backup ",
-      "sudo mkdir /mnt/nfs && sudo mount -t nfs -o nfsvers=4.1,rsize=1048576,wsize=1048576,hard,timeo=600,retrans=2,noresvport ${aws_efs_file_system.obligatorio-efs.dns_name}:/   /mnt/nfs",
-      "sudo echo '${file(var.script_path)}' > backup.sh",
+      "sudo mkfs -t ext4 /dev/sdh && sudo mkdir /mnt/backup && sudo mount /dev/sdh /mnt/backup ", #Montaje de nuevo disco
+      "sudo mkdir /mnt/nfs && sudo mount -t nfs -o nfsvers=4.1,rsize=1048576,wsize=1048576,hard,timeo=600,retrans=2,noresvport ${aws_efs_file_system.obligatorio-efs.dns_name}:/   /mnt/nfs", #Montaje de EFS
+      "sudo echo '${file(var.script_path)}' > backup.sh", #copia del script desde pc local hacia instancia
       "sudo chmod a+x backup.sh",
       "sudo yum install cronie -y && sudo systemctl enable crond.service && sudo systemctl start crond.service",
-      "echo '0 23 * * * root backup.sh' | sudo tee -a /etc/crontab",
+      "echo '0 23 * * * root backup.sh' | sudo tee -a /etc/crontab", #ejecucion del script todos los dias a las 23hs
       "sudo systemctl restart crond"
     ]
   }
