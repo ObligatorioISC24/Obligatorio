@@ -102,9 +102,8 @@ Este archivo contiene el código para desplegar el servicio de bases de datos RD
 En este archivo se definen todas las variables a utilizar en el código de Terraform. Se define el nombre, el tipo y el valor por defecto que puede tener o no.
 
 ## Backup
-Contaremos dentro de la implementación de nuestra infraestructura con un storage de backup persistente en el cual tendremos un respaldo dentro de una instancia todos los documentos del filesystem asi mismo como tambien un backup de nuestra base de datos.
-Esto lo realizamos con la instancia particularmente cuando se implementa se ejecuta un script para realizar dicho respaldo montando un filesystem que va a alojar el mismo.
 
+Contamos con respaldo a nivel de la base de datos y con respaldo de las imágenes de la app que se encuentran en el servicio de EFS. Para el respaldo de la base de datos se utiliza el servicio de snapshot propio de RDS, el mismo se configura al despliegue y se le puede especificar los días de retención mediante la variable “retention_period”. Para el respaldo de las imágenes alojadas en EFS se desplego una instancia EC2 la cual monta el servicio de EFS y mediante un script que se ejecuta mediante cron realiza una copia hacia un volumen persistente de la instancia y realizar una retención de 7 días. Dicha retención se puede editar en el script backup.sh y la ejecución del mismo se puede editar en el remote-exec de la instancia de backup donde se configura el cron.
 
 ## Providers
 
