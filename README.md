@@ -1,6 +1,6 @@
 # Obligatorio Soluciones Cloud
 
-- [Introducción](#introducción)
+- [Introducción](#Introducción)
 - [Diagrama](#diagrama)
 - [Requerimientos](#requerimientos)
 - [Despliegue](#despliegue)
@@ -10,7 +10,7 @@
 - [Resources](#resources)
 - [Inputs](#inputs)
 
-## Introducción (#introducción)
+## Introducción
 
 Este repo contiene el código en terraform necesario para desplegar la infraestructura en AWS solicitada en el obligatorio de soluciones cloud.
 Descripción de la Arquitectura:
