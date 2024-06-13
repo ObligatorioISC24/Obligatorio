@@ -34,12 +34,18 @@ resource "aws_lb_target_group" "targetA" { // Target Group A
   protocol = "HTTP"
   vpc_id   = aws_vpc.obligatorio-vpc.id
 
+  stickiness {
+    type          = "lb_cookie"
+    cookie_duration = 3600 # Duración de la cookie en segundos
+  }
+
 }
 resource "aws_lb_target_group_attachment" "attachment-A" {
 
   target_group_arn = aws_lb_target_group.targetA.arn
   target_id        = aws_instance.webapp-server01.id
   port             = 80
+
 
 }
 resource "aws_lb_target_group_attachment" "attachment-B" {

@@ -10,7 +10,7 @@
 - [Resources](#resources)
 - [Inputs](#inputs)
 
-## Introducción {#introducción}
+## Introducción (#introducción)
 
 Este repo contiene el código en terraform necesario para desplegar la infraestructura en AWS solicitada en el obligatorio de soluciones cloud.
 Descripción de la Arquitectura:
@@ -20,7 +20,7 @@ Descripción de la Arquitectura:
 - Un servidor donde se almacenan documentos estáticos
 - Un servidor de backup con persistencia
 
-## Diagrama {#diagrama}
+## Diagrama (#diagrama)
 
 El siguiente diagrama representa la infraestructura planteada para la resolución del trabajo obligatorio de soluciones cloud. La misma consta de un application load balancer que atiende las consultas de los usuarios provenientes de internet y las balancea entre dos instancias ec2 que brindan el servicio de web server, dichas instancias se encuentran en zonas de disponibilidad distintas para lograr redundancia. A su vez estas instancias consumen los servicios de RDS (base de datos) y EFS (almacenamiento de archivos) para el funcionamiento de la web app. También se desplego una instancia ec2 que oficia de servidor de backup, todos estos componentes viven dentro de un mismo VPC.
 
@@ -29,13 +29,13 @@ El siguiente diagrama representa la infraestructura planteada para la resolució
 <img src = "Diagrama.png">
 </p>
 
-## Requerimientos {#requerimientos}
+## Requerimientos (#requerimientos)
 
 - [AWS CLI](https://docs.aws.amazon.com/cli/latest/userguide/getting-started-install.html)
 - [Terraform](https://developer.hashicorp.com/terraform/tutorials/aws-get-started/install-cli)
 - [Git](https://github.com/git-guides/install-git)
 
-## Despliegue {#despliegue}
+## Despliegue (#despliegue)
 
 - Clonar el repo localmente 
 - Editar en el archivo obligatorio_vars.tfvars con los valores para las variables
@@ -46,7 +46,7 @@ El siguiente diagrama representa la infraestructura planteada para la resolució
 [![asciicast](https://asciinema.org/a/dhtUDZOmstMq37KSB8gmyeTCt.svg)](https://asciinema.org/a/dhtUDZOmstMq37KSB8gmyeTCt)
 
 
-## Descripción {#descripción}
+## Descripción (#descripción)
 
 Esta infraestructura como código creada en Terraform está dividida en distintos archivos `.tf`, cada uno correspondiente a un recurso o grupo de recursos en común de AWS y un archivo `.tfvars` donde se carga el valor para las variables definidas. Explicaremos brevemente la función de cada archivo y los puntos importantes de cada uno.
 
@@ -101,19 +101,19 @@ Este archivo contiene el código para desplegar el servicio de bases de datos RD
 
 En este archivo se definen todas las variables a utilizar en el código de Terraform. Se define el nombre, el tipo y el valor por defecto que puede tener o no.
 
-## Backup {#backup}
+## Backup (#backup)
 Contaremos dentro de la implementación de nuestra infraestructura con un storage de backup persistente en el cual tendremos un respaldo dentro de una instancia todos los documentos del filesystem asi mismo como tambien un backup de nuestra base de datos.
 Esto lo realizamos con la instancia particularmente cuando se implementa se ejecuta un script para realizar dicho respaldo montando un filesystem que va a alojar el mismo.
 
 
-## Providers {#providers}
+## Providers (#providers)
 
 | Name | Version |
 |------|---------|
 | <a name="provider_aws"></a> [aws](#provider\_aws) | 5.52.0 |
 
 
-## Resources {#resources}
+## Resources (#resources)
 
 | Name | Type |
 |------|------|
@@ -141,7 +141,7 @@ Esto lo realizamos con la instancia particularmente cuando se implementa se ejec
 | [aws_subnet.obligatorio-tf-subnet-b](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/subnet) | resource |
 | [aws_vpc.obligatorio-vpc](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/vpc) | resource |
 
-## Inputs {#inputs}
+## Inputs (#inputs)
 
 | Name | Description | Type | Default | Required |
 |------|-------------|------|---------|:--------:|
