@@ -1,3 +1,4 @@
+//ALB, se crea el loadbalancer de tipo aplicacion y se le asignan las redes y SG.
 resource "aws_lb" "alb-obligatorio" {
   name               = "alb-obligatorio"
   internal           = false
@@ -8,10 +9,10 @@ resource "aws_lb" "alb-obligatorio" {
   enable_deletion_protection = false
 
   tags = {
-    Environment = "dev"
+    Environment = "Prod"
   }
 }
-// Listener
+// Listener escucha en el puerto 80 y reenvia el trafico al target group
 
 resource "aws_lb_listener" "my_alb_listener" {
   load_balancer_arn = aws_lb.alb-obligatorio.arn
@@ -21,15 +22,15 @@ resource "aws_lb_listener" "my_alb_listener" {
   default_action {
 
     type             = "forward"
-    target_group_arn = aws_lb_target_group.targetA.id
+    target_group_arn = aws_lb_target_group.target_group.id
   }
 
 }
 
-// Target groups
+// Target groups, obtiene las instancias desde el ASG
 
-resource "aws_lb_target_group" "targetA" { // Target Group A
-  name     = "target-group-a"
+resource "aws_lb_target_group" "target_group" { // Target Group
+  name     = "target-group"
   port     = 80
   protocol = "HTTP"
   vpc_id   = aws_vpc.obligatorio-vpc.id
@@ -39,19 +40,4 @@ resource "aws_lb_target_group" "targetA" { // Target Group A
     cookie_duration = 3600 # Duración de la cookie en segundos
   }
 
-}
-resource "aws_lb_target_group_attachment" "attachment-A" {
-
-  target_group_arn = aws_lb_target_group.targetA.arn
-  target_id        = aws_instance.webapp-server01.id
-  port             = 80
-
-
-}
-resource "aws_lb_target_group_attachment" "attachment-B" {
-
-  target_group_arn = aws_lb_target_group.targetA.arn
-  target_id        = aws_instance.webapp-server02.id
-  port             = 80
-
-}
+ }
