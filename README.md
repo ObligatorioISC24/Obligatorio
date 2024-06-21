@@ -22,7 +22,7 @@ Descripción de la Arquitectura:
 
 ## Diagrama
 
-El siguiente diagrama representa la infraestructura planteada para la resolución del trabajo obligatorio de soluciones cloud. La misma consta de un application load balancer que atiende las consultas de los usuarios provenientes de internet y las balancea entre dos instancias ec2 que brindan el servicio de web server, dichas instancias se encuentran en zonas de disponibilidad distintas para lograr redundancia. A su vez estas instancias consumen los servicios de RDS (base de datos) y EFS (almacenamiento de archivos) para el funcionamiento de la web app. También se desplego una instancia ec2 que oficia de servidor de backup, todos estos componentes viven dentro de un mismo VPC.
+El siguiente diagrama representa la infraestructura planteada para la resolución del trabajo obligatorio de soluciones cloud. La misma consta de un application load balancer que atiende las consultas de los usuarios provenientes de internet y las balancea entre dos instancias ec2 que brindan el servicio de web server, desplegadas mediante auto scaling group en zonas de disponibilidad distintas para lograr redundancia y alta disponibilidad. A su vez estas instancias consumen los servicios de RDS (base de datos) y EFS (almacenamiento de archivos) para el funcionamiento de la web app. También se desplego una instancia ec2 que oficia de servidor de backup, todos estos componentes viven dentro de un mismo VPC.
 
 
 <p align = "center"> 
@@ -38,10 +38,10 @@ El siguiente diagrama representa la infraestructura planteada para la resolució
 ## Despliegue
 
 - Clonar el repo localmente 
-- Editar en el archivo obligatorio_vars.tfvars con los valores para las variables
-- Configurar las credenciales de AWS en el archivo credentials
-- Inicializar el directorio de trabajo con terraform init
-- Ejecutar el codigo con terraform apply -var-file="obligatorio_vars.tfvars"
+- Editar en el archivo `obligatorio_vars.tfvars` con los valores para las variables
+- Configurar las credenciales de AWS en el archivo `credentials`
+- Inicializar el directorio de trabajo con `terraform init`
+- Ejecutar el codigo con `terraform apply -var-file="obligatorio_vars.tfvars"`
 
 [![asciicast](https://asciinema.org/a/dhtUDZOmstMq37KSB8gmyeTCt.svg)](https://asciinema.org/a/dhtUDZOmstMq37KSB8gmyeTCt)
 
@@ -52,24 +52,19 @@ Esta infraestructura como código creada en Terraform está dividida en distinto
 
 ### `alb.tf`
 
-Este archivo contiene el código para desplegar el Application Load Balancer. Dentro del mismo se define los listener, target group y se asocia el security group correspondiente para permitir el acceso.
+Este archivo contiene el código para desplegar el `Application Load Balancer`. Dentro del mismo se define los listener, target group y se asocia el security group correspondiente para permitir el acceso.
+
+### `asg.tf`
+
+Este archivo contiene el código para desplegar el `Auto Scaling Group`. ASG nos permite el despliegue automático de instancias para tener alta disponibilidad. Definimos un `launch configuration` con el tipo de instancia, ami, key y utilizamos el user-data que nos permite ejecutar personalizaciones al momento del despliegue de las instancias para crear variables de entorno, por ejemplo la clave de la base de datos para no tener que dejarla escrita en el código. También descargamos y ejecutamos un script de despliegue con todo lo necesario para levantar la app web.
 
 ### `efs.tf`
 
-Este archivo contiene el código para desplegar el servicio de archivos EFS. Dentro del mismo se define los mount target que son desde qué redes se va a poder montar por NFS dicho servicio y se asocia el security group correspondiente para permitir el acceso.
+Este archivo contiene el código para desplegar el servicio de archivos `EFS`. Dentro del mismo se define los mount target que son desde qué redes se va a poder montar por NFS dicho servicio y se asocia el security group correspondiente para permitir el acceso.
 
 ### `instancias.tf`
 
-Este archivo contiene el código para desplegar las instancias. Dentro del mismo se definen cosas básicas como la AMI, subred, SG, etc. Lo particular en nuestro caso es la personalización que realizamos dentro del sistema operativo de cada instancia con el provisioner “remote-exec”. Con este provisioner podemos ejecutar comandos del sistema operativo una vez que la instancia está levantada.
-
-En el caso de las instancias que utilizamos para la web app, con el `remote-exec` ejecutamos los comandos correspondientes para dejar la app 100% operativa. Esto incluye los siguientes puntos:
-
-- Instalar repositorios y servicios (epel, remis, php, apache, mysql).
-- Instalar la app realizando la clonación de un repositorio git.
-- Configurar la app para que acceda a la base de datos creada en RDS.
-- Montar el EFS creado en la carpeta donde guarda las imágenes la app.
-- Levantar un respaldo de la base de datos desde un dump.
-- Inicializar servicios.
+Este archivo contiene el código para desplegar la instancia de backup. Dentro del mismo se definen cosas básicas como la AMI, subred, SG, etc. Lo particular en nuestro caso es la personalización que realizamos dentro del sistema operativo de la instancia con el provisioner “remote-exec”. Con este provisioner podemos ejecutar comandos del sistema operativo una vez que la instancia está levantada.
 
 En el caso de la instancia para backups, con el `remote-exec` realizamos los siguientes puntos:
 
@@ -91,11 +86,11 @@ Este archivo contiene el código para desplegar todos los componentes de red que
 
 ### `provider.tf`
 
-En este archivo se especifican los provider a utilizar en el código de Terraform. En nuestro caso, estamos utilizando solo el de AWS.
+En este archivo se especifican los provider a utilizar en el código de Terraform. En nuestro caso, estamos utilizando solo el de `AWS`.
 
 ### `rds.tf`
 
-Este archivo contiene el código para desplegar el servicio de bases de datos RDS de AWS. Se define el motor de base de datos a utilizar (MySQL) y la versión 5.7.44. También se especifica que se realice backup de la misma con un periodo de retención definido en la variable `retention_period`.
+Este archivo contiene el código para desplegar el servicio de bases de datos `RDS` de AWS. Se define el motor de base de datos a utilizar (MySQL) y la versión 5.7.44. También se especifica que se realice backup de la misma con un periodo de retención definido en la variable `retention_period`.
 
 ### `variables.tf`
 
@@ -103,7 +98,7 @@ En este archivo se definen todas las variables a utilizar en el código de Terra
 
 ## Backup
 
-Contamos con respaldo a nivel de la base de datos y con respaldo de las imágenes de la app que se encuentran en el servicio de EFS. Para el respaldo de la base de datos se utiliza el servicio de snapshot propio de RDS, el mismo se configura al despliegue y se le puede especificar los días de retención mediante la variable “retention_period”. Para el respaldo de las imágenes alojadas en EFS se desplego una instancia EC2 la cual monta el servicio de EFS y mediante un script que se ejecuta mediante cron realiza una copia hacia un volumen persistente de la instancia y realizar una retención de 7 días. Dicha retención se puede editar en el script backup.sh y la ejecución del mismo se puede editar en el remote-exec de la instancia de backup donde se configura el cron.
+Contamos con respaldo a nivel de la base de datos y con respaldo de las imágenes de la app que se encuentran en el servicio de EFS. Para el respaldo de la base de datos se utiliza el servicio de snapshot propio de RDS, el mismo se configura al despliegue y se le puede especificar los días de retención mediante la variable “retention_period”. Para el respaldo de las imágenes alojadas en EFS se desplego una instancia `EC2` la cual monta el servicio de `EFS` y mediante un script que se ejecuta mediante cron realiza una copia hacia un volumen persistente de la instancia y realizar una retención de 7 días. Dicha retención se puede editar en el script `backup.sh` y la ejecución del mismo se puede editar en el `remote-exec` de la instancia de backup donde se configura el cron.
 
 ## Providers
 
