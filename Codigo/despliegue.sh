@@ -20,7 +20,7 @@ sudo sed -i "s/localhost/$RDS/" /var/www/html/config.php
 sudo sed -i "s/define('DB_PASSWORD', 'root')/define('DB_PASSWORD', "\'$DB_PASS\'")/" /var/www/html/config.php 
 sudo chown -R apache:apache /var/www #cambio de usuario y grupo por el de apache
 sudo wget -P /home/ec2-user/ https://raw.githubusercontent.com/ObligatorioISC24/ecommerce/main/dump.sql
-sudo wget -P /home/ec2-user/ https://raw.githubusercontent.com/ObligatorioISC24/prueba/main/Codigo/dump.sh
+sudo wget -P /home/ec2-user/ https://raw.githubusercontent.com/ObligatorioISC24/Obligatorio/main/Codigo/dump.sh
 sudo chmod a+x /home/ec2-user/dump.sh
 sudo /home/ec2-user/dump.sh
 sudo systemctl start httpd
