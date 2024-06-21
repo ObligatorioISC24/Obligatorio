@@ -32,7 +32,7 @@ resource "aws_instance" "backup-server" {
       "sudo echo '${file(var.script_path)}' > backup.sh", #copia del script desde pc local hacia instancia
       "sudo chmod a+x backup.sh",
       "sudo yum install cronie -y && sudo systemctl enable crond.service && sudo systemctl start crond.service",
-      "echo '0 23 * * * root backup.sh' | sudo tee -a /etc/crontab", #ejecucion del script todos los dias a las 23hs
+      "echo '0 23 * * * root /home/ec2-user/backup.sh' | sudo tee -a /etc/crontab", #ejecucion del script todos los dias a las 23hs
       "sudo systemctl restart crond"
     ]
   }
