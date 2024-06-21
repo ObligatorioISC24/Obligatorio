@@ -32,7 +32,7 @@ resource "aws_autoscaling_group" "obligatorio-asg" {
     aws_subnet.obligatorio-tf-subnet-a.id,  # ID de la subred en la zona de disponibilidad A
     aws_subnet.obligatorio-tf-subnet-b.id,  # ID de la subred en la zona de disponibilidad B
   ]
-  min_size                  = 1  # Mínimo número de instancias
+  min_size                  = 2  # Mínimo número de instancias
   max_size                  = 3  # Máximo número de instancias
   desired_capacity          = 2  # Capacidad deseada de instancias
 
