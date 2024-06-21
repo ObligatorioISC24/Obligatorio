@@ -13,7 +13,9 @@
 ## Introducción
 
 Este repo contiene el código en terraform necesario para desplegar la infraestructura en AWS solicitada en el obligatorio de soluciones cloud.
-Descripción de la Arquitectura:
+
+**Descripción de la Arquitectura:**
+
 - Un LoadBalancer HTTP/S
 - Dos servidores Web
 - Una base de datos relacional
