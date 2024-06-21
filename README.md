@@ -26,7 +26,7 @@ El siguiente diagrama representa la infraestructura planteada para la resolució
 
 
 <p align = "center"> 
-<img src = "Diagrama.png">
+<img src = "diagrama.png">
 </p>
 
 ## Requerimientos
