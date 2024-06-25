@@ -152,3 +152,7 @@ Contamos con respaldo a nivel de la base de datos y con respaldo de las imágene
 | <a name="input_vpc_aws_az-a"></a> [vpc\_aws\_az-a](#input\_vpc\_aws\_az-a) | Variable para la zona az-a | `string` | n/a | yes |
 | <a name="input_vpc_aws_az-b"></a> [vpc\_aws\_az-b](#input\_vpc\_aws\_az-b) | Variable para la zona az-b | `string` | n/a | yes |
 | <a name="input_vpc_cidr"></a> [vpc\_cidr](#input\_vpc\_cidr) | Variable para el CIDR block | `string` | n/a | yes |
+
+## Acceso a Repo
+
+- [Git](https://github.com/ObligatorioISC24/Obligatorio)
