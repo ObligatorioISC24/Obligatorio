@@ -155,4 +155,4 @@ Contamos con respaldo a nivel de la base de datos y con respaldo de las imágene
 
 ## Acceso a Repo
 
-- [Git](https://github.com/ObligatorioISC24/Obligatorio)
+- [Obligatorio](https://github.com/ObligatorioISC24/Obligatorio)
