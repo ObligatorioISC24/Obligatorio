@@ -1,4 +1,12 @@
-# Obligatorio Soluciones Cloud
+# Trabajo Obligatorio 2024 - Universidad ORT
+
+**Materia:** Soluciones Cloud  
+
+**Docentes:** Mauricio Améndola
+
+**Alumnos:** Martin Torres (273693) - Santiago Clavijo (174971)
+
+----
 
 - [Introducción](#Introducción)
 - [Diagrama](#diagrama)
