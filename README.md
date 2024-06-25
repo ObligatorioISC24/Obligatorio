@@ -2,7 +2,7 @@
 
 **Materia:** Soluciones Cloud  
 
-**Docentes:** Mauricio Améndola
+**Docente:** Mauricio Améndola
 
 **Alumnos:** Martin Torres (273693) - Santiago Clavijo (174971)
 
