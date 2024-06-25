@@ -17,6 +17,7 @@
 - [Providers](#providers)
 - [Resources](#resources)
 - [Inputs](#inputs)
+- [Acceso a Repo](#acceso-a-repo)
 
 ## Introducción
 
